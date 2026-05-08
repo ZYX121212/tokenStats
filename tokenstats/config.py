@@ -24,7 +24,7 @@ class AppConfig:
     proxy_port: int = 8765
     alert_threshold_5m: int = 20000
     opacity: float = 0.92
-    theme: str = "dark"
+    theme: str = "modern_light"
     always_on_top: bool = True
     lock_position: bool = False
     show_on_start: bool = True
@@ -32,6 +32,25 @@ class AppConfig:
     window_y: int = 80
     currency: str = "USD"
     usd_to_cny: float = 7.25
+    
+    # 新增：悬浮窗配置
+    floating_width: int = 220
+    floating_height: int = 150
+    floating_scale: float = 1.0
+    snap_to_edge: bool = True
+    
+    # 新增：快捷键配置
+    shortcut_toggle: str = "Ctrl+Shift+T"
+    shortcut_stats: str = "Ctrl+Shift+S"
+    shortcut_quit: str = "Ctrl+Shift+Q"
+    
+    # 新增：通知配置
+    enable_notifications: bool = True
+    daily_report: bool = True
+    
+    # 新增：备份配置
+    auto_backup: bool = True
+    backup_retention_days: int = 30
     model_prices: Dict[str, Dict[str, float]] = field(
         default_factory=lambda: {
             "GPT-4o": {"input": 2.50, "output": 10.00},
@@ -93,7 +112,7 @@ def load_config() -> AppConfig:
         proxy_port=int(raw.get("proxy_port", 8765)),
         alert_threshold_5m=int(raw.get("alert_threshold_5m", 20000)),
         opacity=float(raw.get("opacity", 0.92)),
-        theme=raw.get("theme", "dark"),
+        theme=raw.get("theme", "modern_light"),
         always_on_top=bool(raw.get("always_on_top", True)),
         lock_position=bool(raw.get("lock_position", False)),
         show_on_start=bool(raw.get("show_on_start", True)),
@@ -101,6 +120,17 @@ def load_config() -> AppConfig:
         window_y=int(raw.get("window_y", 80)),
         currency=raw.get("currency", "USD"),
         usd_to_cny=float(raw.get("usd_to_cny", 7.25)),
+        floating_width=int(raw.get("floating_width", 220)),
+        floating_height=int(raw.get("floating_height", 150)),
+        floating_scale=float(raw.get("floating_scale", 1.0)),
+        snap_to_edge=bool(raw.get("snap_to_edge", True)),
+        shortcut_toggle=raw.get("shortcut_toggle", "Ctrl+Shift+T"),
+        shortcut_stats=raw.get("shortcut_stats", "Ctrl+Shift+S"),
+        shortcut_quit=raw.get("shortcut_quit", "Ctrl+Shift+Q"),
+        enable_notifications=bool(raw.get("enable_notifications", True)),
+        daily_report=bool(raw.get("daily_report", True)),
+        auto_backup=bool(raw.get("auto_backup", True)),
+        backup_retention_days=int(raw.get("backup_retention_days", 30)),
         model_prices=merged_prices,
         providers=providers or defaults.providers,
     )
@@ -153,7 +183,7 @@ def import_config(file_path: Path) -> AppConfig:
         proxy_port=int(raw.get("proxy_port", 8765)),
         alert_threshold_5m=int(raw.get("alert_threshold_5m", 20000)),
         opacity=float(raw.get("opacity", 0.92)),
-        theme=raw.get("theme", "dark"),
+        theme=raw.get("theme", "modern_light"),
         always_on_top=bool(raw.get("always_on_top", True)),
         lock_position=bool(raw.get("lock_position", False)),
         show_on_start=bool(raw.get("show_on_start", True)),
@@ -161,6 +191,17 @@ def import_config(file_path: Path) -> AppConfig:
         window_y=int(raw.get("window_y", 80)),
         currency=raw.get("currency", "USD"),
         usd_to_cny=float(raw.get("usd_to_cny", 7.25)),
+        floating_width=int(raw.get("floating_width", 220)),
+        floating_height=int(raw.get("floating_height", 150)),
+        floating_scale=float(raw.get("floating_scale", 1.0)),
+        snap_to_edge=bool(raw.get("snap_to_edge", True)),
+        shortcut_toggle=raw.get("shortcut_toggle", "Ctrl+Shift+T"),
+        shortcut_stats=raw.get("shortcut_stats", "Ctrl+Shift+S"),
+        shortcut_quit=raw.get("shortcut_quit", "Ctrl+Shift+Q"),
+        enable_notifications=bool(raw.get("enable_notifications", True)),
+        daily_report=bool(raw.get("daily_report", True)),
+        auto_backup=bool(raw.get("auto_backup", True)),
+        backup_retention_days=int(raw.get("backup_retention_days", 30)),
         model_prices=merged_prices,
         providers=providers or defaults.providers,
     )
