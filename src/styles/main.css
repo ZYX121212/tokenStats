@@ -721,3 +721,39 @@ html { scroll-behavior: smooth; }
 .diag-status-ok { color: var(--emerald); }
 .diag-status-warn { color: var(--amber); }
 .diag-status-error { color: var(--rose); }
+
+/* Settings Groups */
+.settings-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.section-description {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.field-label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-secondary {
+    display: flex;
+    gap: 8px;
+}
