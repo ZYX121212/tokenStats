@@ -1,11 +1,13 @@
+import Icon from '../common/Icon';
 import { state, setTab } from '../../stores/mainStore';
 import type { TabId } from '../../stores/mainStore';
 
-const TABS: { id: TabId; label: string }[] = [
-  { id: 'overview', label: '概览' },
-  { id: 'statistics', label: '统计' },
-  { id: 'settings', label: '设置' },
-  { id: 'diagnostics', label: '诊断' },
+const TABS: { id: TabId; label: string; icon: string }[] = [
+  { id: 'overview', label: '概览', icon: 'layout' },
+  { id: 'statistics', label: '统计', icon: 'bar-chart' },
+  { id: 'logs', label: '日志', icon: 'list' },
+  { id: 'settings', label: '设置', icon: 'settings' },
+  { id: 'diagnostics', label: '诊断', icon: 'activity' },
 ];
 
 export default function TabNav() {
@@ -20,6 +22,7 @@ export default function TabNav() {
           aria-controls={`tabpanel-${tab.id}`}
           onClick={() => setTab(tab.id)}
         >
+          <Icon name={tab.icon} size={14} />
           <span>{tab.label}</span>
         </button>
       ))}

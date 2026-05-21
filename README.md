@@ -1,183 +1,95 @@
-# TokenStats v2.0
+# TokenStats
 
-TokenStats 是一个轻量级桌面悬浮窗，用本地代理模式统计大模型 API 的 token 消耗。数据只写入本机 SQLite。
+🖥️ 桌面级 LLM API Token 用量追踪代理
 
-## 功能
+![Rust](https://img.shields.io/badge/rust-stable-orange)
+![Tauri](https://img.shields.io/badge/tauri-2.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-### 核心功能
-- 桌面悬浮窗：5 分钟滚动 token、最近一次调用、累计总量、活跃模型队列
-- 紧凑悬浮窗：只显示当前模型、5 分钟 token、累计 token
-- 系统托盘：显示悬浮窗、打开详细统计、设置、退出
-- 详细统计：按时间和 provider 过滤，查看不同模型 token、占比和估算成本
-- 完整设置页：代理监听地址、端口、悬浮窗置顶/锁定/启动显示、Provider 启用、API Key、成本币种、汇率、模型单价
-- 本地 HTTP 代理：转发 OpenAI / Anthropic / Gemini / OpenAI 兼容网关请求
-- 自动解析 usage：`usage`、`usage.input_tokens/output_tokens`、`usageMetadata`
-- 模型别名归一化：如 `gpt-4o-2024-11-20` 显示为 `GPT-4o`
-- 阈值预警、透明度调节、主题切换、拖拽移动
-- SQLite 本地存储
+## ✨ 功能
 
-### v2.0 新增功能
+- 📊 **实时统计** — 追踪每个 LLM API 调用的 token 使用量
+- 💰 **费用估算** — 自动计算各模型的 API 费用
+- 📈 **趋势图表** — 按小时/天查看使用趋势
+- 🪟 **悬浮窗** — 桌面全局悬浮窗，实时显示关键指标
+- 🔌 **透明代理** — 作为 HTTP 代理转发请求，无需修改客户端代码
+- ⚙️ **多 Provider 支持** — OpenAI / Anthropic Claude / 兼容 API
 
-#### 多主题系统
-- 6 种预设主题：现代简约、深色科技、专业商务、森林绿、海洋蓝、日落橙
-- 实时主题切换，全局生效
-- 主题颜色自动适配悬浮窗、对话框、图表
+## 🚀 快速开始
 
-#### 数据可视化
-- 趋势图：折线图显示 Token 消耗时间趋势
-- 对比图：柱状图展示各模型/Provider 消耗对比
-- 分布图：饼图展示模型消耗占比分布
-- 实时数据更新，支持多模型同时显示
+### 前置要求
 
-#### 交互优化
-- 全局快捷键：
-  - `Ctrl+Shift+T`：显示/隐藏悬浮窗
-  - `Ctrl+Shift+S`：打开详细统计
-  - `Ctrl+Shift+Q`：退出应用
-- 系统通知：阈值预警、每日报告、异常提醒
-- 自动备份：每日自动备份数据库，保留 30 天
+- [Rust](https://www.rust-lang.org/tools/install) ≥ 1.78
+- [Node.js](https://nodejs.org/) ≥ 20 (用于前端构建)
+- macOS ≥ 10.15 / Windows 10 / Ubuntu 20.04
 
-## 安装
+### 安装与运行
 
 ```bash
-python3 -m venv .venv
-. .venv/bin/activate
-pip install -r requirements.txt
+# 克隆仓库
+git clone https://github.com/your-user/tokenstats.git
+cd tokenstats
+
+# 安装前端依赖
+npm install
+
+# 开发模式运行
+cargo tauri dev
+
+# 生产构建
+cargo tauri build
 ```
 
-## 启动
+## 🔧 配置
 
-```bash
-python -m tokenstats
+首次运行后会生成配置文件 `~/.tokenstats/config.json`：
+
+```json
+{
+  "proxy_host": "127.0.0.1",
+  "proxy_port": 8765,
+  "providers": [
+    {
+      "name": "openai",
+      "base_url": "https://api.openai.com/v1",
+      "api_key": "sk-your-key-here"
+    }
+  ]
+}
 ```
 
-首次启动后，在悬浮窗或系统托盘右键菜单打开"设置"，填写 API Key 和上游地址。右键悬浮窗或托盘可打开"详细统计"。
+然后将你的 LLM 客户端的 API 地址指向 `http://127.0.0.1:8765` 即可开始追踪。
 
-## SDK 接入示例
+## 🏗️ 技术栈
 
-OpenAI 兼容接口：
+| 层 | 技术 |
+|----|------|
+| 桌面框架 | [Tauri 2.0](https://tauri.app/) (Rust + WebView) |
+| 前端 | TypeScript + Vite 6 + 原生 Canvas |
+| 后端 | Rust + SQLite + reqwest + hyper |
+| 构建工具 | cargo tauri |
 
-```python
-from openai import OpenAI
+## 📁 项目结构
 
-client = OpenAI(
-    api_key="任意值，真实 key 在 TokenStats 设置中保存",
-    base_url="http://127.0.0.1:8765/openai/v1",
-)
-
-resp = client.chat.completions.create(
-    model="gpt-4o-mini",
-    messages=[{"role": "user", "content": "hello"}],
-)
+```
+tokenStats/
+├── src/                  # 前端源码 (TypeScript/CSS)
+│   ├── scripts/         # JS/TS 逻辑
+│   │   ├── lib/         # 共享模块
+│   │   └── __tests__/   # 测试
+│   ├── styles/           # CSS 样式
+│   ├── index.html       # 主窗口
+│   └── floating.html    # 悬浮窗
+├── src-tauri/           # Tauri 后端 (Rust)
+│   ├── src/             # Rust 源码
+│   │   ├── domain/      # 领域层
+│   │   ├── application/ # 应用层
+│   │   └── infrastructure/
+│   ├── icons/           # 应用图标
+│   └── tauri.conf.json  # Tauri 配置
+└── package.json         # 前端依赖
 ```
 
-DeepSeek / OpenRouter / OneAPI 等 OpenAI 兼容网关：
+## 📄 License
 
-```python
-client = OpenAI(
-    api_key="任意值",
-    base_url="http://127.0.0.1:8765/compatible/v1",
-)
-```
-
-在设置中把 `compatible` 的上游地址改为你的网关地址，例如 `https://openrouter.ai/api` 或 `https://api.deepseek.com`。
-
-中转站 / 聚合网关：
-
-TokenStats 预置了 `relay1`、`relay2`、`relay3` 三个中转站槽位。在设置页启用其中一个，填写中转站的上游地址，例如：
-
-```text
-https://relay.example.com/v1
-```
-
-如果 SDK 侧也使用 `/v1` 路径，TokenStats 会自动避免转发成 `/v1/v1`。
-
-```python
-client = OpenAI(
-    api_key="任意值",
-    base_url="http://127.0.0.1:8765/relay1/v1",
-)
-```
-
-常见鉴权方式：
-
-- `bearer`：TokenStats 使用设置里的 API Key 写入 `Authorization: Bearer ...`
-- `pass_through`：透传 SDK 请求自带的鉴权头
-- `x-api-key`：使用 `x-api-key`
-- `none`：不注入鉴权头
-
-Anthropic：
-
-```python
-from anthropic import Anthropic
-
-client = Anthropic(
-    api_key="任意值",
-    base_url="http://127.0.0.1:8765/anthropic",
-)
-```
-
-Gemini REST：
-
-```text
-http://127.0.0.1:8765/gemini/v1beta/models/gemini-1.5-pro:generateContent
-```
-
-## 数据位置
-
-默认数据库：
-
-```text
-~/.tokenstats/tokenstats.sqlite3
-```
-
-默认配置：
-
-```text
-~/.tokenstats/config.json
-```
-
-备份目录：
-
-```text
-~/.tokenstats/backups/
-```
-
-## 主题列表
-
-| 主题名称 | 风格描述 |
-|---------|---------|
-| 现代简约 | 浅灰背景，蓝色强调（默认） |
-| 深色科技 | 深蓝灰背景，青色强调 |
-| 专业商务 | 白色背景，深蓝强调 |
-| 森林绿 | 浅绿背景，深绿强调 |
-| 海洋蓝 | 浅蓝背景，海蓝强调 |
-| 日落橙 | 浅橙背景，橙红强调 |
-
-## 快捷键
-
-| 快捷键 | 功能 |
-|-------|------|
-| `Ctrl+Shift+T` | 显示/隐藏悬浮窗 |
-| `Ctrl+Shift+S` | 打开详细统计 |
-| `Ctrl+Shift+Q` | 退出应用 |
-
-快捷键可在设置中自定义。
-
-## 说明
-
-TokenStats 不做 HTTPS MITM。它作为显式本地代理使用：把 SDK 的 `base_url` 指向 TokenStats，再由 TokenStats 转发到真实 API。
-
-## 更新日志
-
-### v2.0
-- 新增多主题系统（6种预设主题）
-- 新增数据可视化功能（折线图、柱状图、饼图）
-- 新增全局快捷键支持
-- 新增系统通知功能
-- 新增自动备份功能
-- 重构 UI 模块，提高可维护性
-- 优化悬浮窗视觉效果
-
-### v1.0
-- 初始版本发布
+MIT

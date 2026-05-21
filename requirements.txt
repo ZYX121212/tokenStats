@@ -1,4 +1,0 @@
-PyQt5>=5.15
-httpx>=0.27
-pyqtgraph>=0.13
-numpy>=1.24

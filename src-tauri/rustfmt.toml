@@ -1,0 +1,15 @@
+# rustfmt 配置 — stable channel，Rust 2021 edition
+edition = "2021"
+
+# 每行最大宽度
+max_width = 100
+
+# 空格缩进
+hard_tabs = false
+tab_spaces = 4
+
+# 函数参数超出宽度时每个参数独占一行（fn_args_layout 已废弃）
+fn_params_layout = "Tall"
+
+# 链式调用宽度阈值
+chain_width = 60

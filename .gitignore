@@ -1,5 +1,39 @@
 .DS_Store
-.venv/
-__pycache__/
-*.py[cod]
-.pytest_cache/
+
+# Node.js
+node_modules/
+
+# Vite build output
+dist/
+
+# Rust / Cargo
+src-tauri/target/
+
+# Database
+*.db
+*.db-journal
+*.db-wal
+
+# Logs
+logs/
+
+# macOS
+*.swp
+*~
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.code-workspace
+.trae/
+.zed/
+
+# Superpowers
+.superpowers/
+
+# Rust build (root level)
+target/
